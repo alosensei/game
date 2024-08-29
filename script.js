@@ -7,21 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let level = 0;
     let upgradeCost = 100;
-    let upgradeIncrement = 1;
+    let upgradeInterval = null;
 
     function updateDisplay() {
         scoreElement.textContent = score;
         levelElement.textContent = level;
         buyUpgradeButton.textContent = `Comprar Mejora (${upgradeCost})`;
-        if (score >= upgradeCost) {
-            buyUpgradeButton.disabled = false;
-        } else {
-            buyUpgradeButton.disabled = true;
+        buyUpgradeButton.disabled = score < upgradeCost;
+    }
+
+    function startScoreIncrease() {
+        if (upgradeInterval) {
+            clearInterval(upgradeInterval);
         }
+        upgradeInterval = setInterval(() => {
+            score += level;
+            updateDisplay();
+        }, 1000);
     }
 
     tapButton.addEventListener('click', () => {
-        score += upgradeIncrement;
+        score += level + 1; // Incrementa la puntuación por nivel actual
         updateDisplay();
     });
 
@@ -29,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (score >= upgradeCost) {
             score -= upgradeCost;
             level += 1;
-            upgradeCost = Math.ceil(upgradeCost * 1.15); // Aumento del costo en 15%
-            upgradeIncrement = level + 1; // Incremento del nivel
+            upgradeCost = Math.ceil(upgradeCost * 1.15); // Incrementa el costo en 15%
             updateDisplay();
-            buyUpgradeButton.classList.add('purchased');
+            startScoreIncrease(); // Comienza a aumentar la puntuación cada segundo
+            buyUpgradeButton.classList.add('purchased'); // Cambia el color del botón
         } else {
             alert('No tienes suficientes puntos para comprar esta mejora.');
         }
