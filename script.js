@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let upgrade1Active = false;
     let upgrade2Unlocked = false;
     let upgrade2Active = false;
-    const upgrade1Cost = 15000;
-    const upgrade1UnlockScore = 10000;
-    const upgrade2Cost = 30000;
-    const upgrade2Bonus = 45000;
+    const upgrade1Cost = 150;
+    const upgrade1UnlockScore = 100;
+    const upgrade2Cost = 300;
+    const upgrade2Bonus = 450;
 
     function updateScoreDisplay() {
         scoreElement.textContent = score;
