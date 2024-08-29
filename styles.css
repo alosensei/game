@@ -28,7 +28,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #tap-button {
@@ -37,10 +37,10 @@ button {
 }
 
 #buy-upgrade {
-    background-color: #008c8c; /* Color verde azulado */
+    background-color: #008c8c; /* Color inicial verde azulado */
     color: white;
 }
 
 #buy-upgrade.purchased {
-    background-color: #00bcd4; /* Color actualizado después de la compra */
+    background-color: #00bcd4; /* Color después de la compra */
 }
