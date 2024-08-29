@@ -10,7 +10,7 @@ body {
 
 #game-container {
     width: 300px;
-    height: 200px;
+    height: 250px;
     border: 2px solid #ccc;
     display: flex;
     flex-direction: column;
@@ -35,8 +35,12 @@ button {
     color: white;
 }
 
-#buy-upgrade1 {
+#buy-upgrade1, #buy-upgrade2 {
     background-color: #008c8c; /* Color verde azulado */
     color: white;
     cursor: not-allowed;
+}
+
+#buy-upgrade1.active, #buy-upgrade2.active {
+    cursor: pointer;
 }
