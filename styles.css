@@ -10,7 +10,7 @@ body {
 
 #game-container {
     width: 300px;
-    height: 250px;
+    height: 200px;
     border: 2px solid #ccc;
     display: flex;
     flex-direction: column;
@@ -28,6 +28,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 #tap-button {
@@ -35,12 +36,11 @@ button {
     color: white;
 }
 
-#buy-upgrade1, #buy-upgrade2 {
+#buy-upgrade {
     background-color: #008c8c; /* Color verde azulado */
     color: white;
-    cursor: not-allowed;
 }
 
-#buy-upgrade1.active, #buy-upgrade2.active {
-    cursor: pointer;
+#buy-upgrade.purchased {
+    background-color: #00bcd4; /* Color actualizado después de la compra */
 }
