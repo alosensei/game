@@ -1,50 +1,62 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const scoreSpan = document.getElementById('score');
+    const scoreElement = document.getElementById('score');
     const tapButton = document.getElementById('tap-button');
     const buyUpgrade1Button = document.getElementById('buy-upgrade1');
-    
-    function updateScore() {
-        fetch('/score')
-            .then(response => response.json())
-            .then(data => {
-                scoreSpan.textContent = data.score;
-            });
+
+    let score = 0;
+    let upgrade1Unlocked = false;
+    let upgrade1Active = false;
+    const upgrade1Cost = 15000;
+    const upgrade1UnlockScore = 10000;
+
+    function updateScoreDisplay() {
+        scoreElement.textContent = score;
+        if (score >= upgrade1UnlockScore && !upgrade1Unlocked) {
+            buyUpgrade1Button.disabled = false;
+        }
+        if (score < upgrade1Cost) {
+            buyUpgrade1Button.disabled = true;
+        }
     }
 
     tapButton.addEventListener('click', () => {
-        fetch('/score', { method: 'POST' })
-            .then(() => updateScore());
+        score += 1;
+        updateScoreDisplay();
+        if (upgrade1Active) {
+            // Increment score by 1 every second
+            setTimeout(() => {
+                if (upgrade1Active) {
+                    score += 1;
+                    updateScoreDisplay();
+                }
+            }, 1000);
+        }
     });
 
     buyUpgrade1Button.addEventListener('click', () => {
-        fetch('/buy_upgrade', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ upgrade: 'upgrade1' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateScore();
-                startUpgradeBonus();
-            } else {
-                alert(data.error);
-            }
-        });
+        if (score >= upgrade1Cost) {
+            score -= upgrade1Cost;
+            upgrade1Unlocked = true;
+            upgrade1Active = true;
+            updateScoreDisplay();
+
+            // Start bonus scoring
+            const bonusInterval = setInterval(() => {
+                if (upgrade1Active) {
+                    score += 1;
+                    updateScoreDisplay();
+                    if (score >= 2 * upgrade1Cost) {
+                        clearInterval(bonusInterval);
+                        upgrade1Active = false;
+                    }
+                } else {
+                    clearInterval(bonusInterval);
+                }
+            }, 1000);
+        } else {
+            alert('No tienes suficientes puntos para comprar esta mejora.');
+        }
     });
 
-    function startUpgradeBonus() {
-        if (buyUpgrade1Button.disabled) return;
-        buyUpgrade1Button.disabled = true;
-
-        const interval = setInterval(() => {
-            fetch('/score', { method: 'POST' })
-                .then(() => updateScore());
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval(interval);
-            buyUpgrade1Button.disabled = false;
-        }, 30000); // Bonus duration, adjust as needed
-    }
+    updateScoreDisplay();
 });
